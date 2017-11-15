@@ -1,7 +1,3 @@
-﻿/*
-  ====== Creating Tables ======
-*/
-
 CREATE TABLE FolderTree (
     id        INTEGER PRIMARY KEY
                       NOT NULL,
@@ -18,7 +14,6 @@ CREATE TABLE Files (
     meta      TEXT    NOT NULL
 );
 
-/*
-  ====== Inserting Values ======
-*/
 
+INSERT INTO FolderTree (id,parent_id,name, meta)
+		VALUES (0, 0,'ROOT', '<>' );
