@@ -2,10 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Security.Cryptography;
+using System.IO;
+using System.IO.Compression;
 
 namespace PlasticBackupCore
 {
-    class CryptoUtils
+    public class CryptoUtils
     {
+        public Stream getEncryptedGzipStream()
+        {
+            return null;
+        }
     }
 }
