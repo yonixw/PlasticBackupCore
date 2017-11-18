@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
-//using System.Data.SQLite;
+using System.Data.SQLite;
 
 namespace PlasticBackupDB.SQLTables
 {
     public class BaseSQLiteAdapter
     {
-        //SQLiteConnection
+        SQLiteConnection myConnection;
+
+        private BaseSQLiteAdapter() { }
+
+        public BaseSQLiteAdapter(SQLiteConnection conn)
+        {
+            myConnection = conn;
+        }
     }
 }
