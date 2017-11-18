@@ -1,7 +1,7 @@
 CREATE TABLE FolderTree (
     id        INTEGER PRIMARY KEY
                       NOT NULL,
-    parent_id INTEGER NOT NULL,
+    parentid  INTEGER NOT NULL,
     name      TEXT    NOT NULL,
     meta      TEXT    NOT NULL
 );
@@ -9,11 +9,22 @@ CREATE TABLE FolderTree (
 CREATE TABLE Files (
     id        INTEGER PRIMARY KEY
                       NOT NULL,
-    folder_id INTEGER NOT NULL,
-    name      TEXT    NOT NULL,
-    meta      TEXT    NOT NULL
+    folderid  INTEGER NOT NULL,
+    name      TEXT    NOT NULL
+);
+
+CREATE TABLE FileMetadata (
+    id        INTEGER PRIMARY KEY
+                      NOT NULL,
+    fileid   INTEGER NOT NULL
+);
+
+CREATE TABLE Metadata (
+	id        INTEGER PRIMARY KEY
+                      NOT NULL,
+	filemetaid       INTEGER NOT NULL,
+    metakey          TEXT    NOT NULL,
+	metavalue        TEXT    NOT NULL
 );
 
 
-INSERT INTO FolderTree (id,parent_id,name, meta)
-		VALUES (0, 0,'ROOT', '<>' );
