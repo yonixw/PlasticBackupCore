@@ -2,8 +2,7 @@ CREATE TABLE FolderTree (
     id        INTEGER PRIMARY KEY
                       NOT NULL,
     parentid  INTEGER NOT NULL,
-    name      TEXT    NOT NULL,
-    meta      TEXT    NOT NULL
+    name      TEXT    NOT NULL
 );
 
 CREATE TABLE Files (
@@ -13,16 +12,21 @@ CREATE TABLE Files (
     name      TEXT    NOT NULL
 );
 
-CREATE TABLE FileMetadata (
+-- More information, when source is either a file or a folder.
+-- One file can have 2 meta items (e.g. all win pc have some C:\Windows\...\?.dll alike)
+-- New path of file is only determined by it's hash metadata. No duplicates!
+
+CREATE TABLE MetadataItems (
     id        INTEGER PRIMARY KEY
                       NOT NULL,
-    fileid   INTEGER NOT NULL
+	isFolder  BOOLEAN NOT NULL,
+    sourceid  INTEGER NOT NULL
 );
 
-CREATE TABLE Metadata (
+CREATE TABLE MetadataValues (
 	id        INTEGER PRIMARY KEY
                       NOT NULL,
-	filemetaid       INTEGER NOT NULL,
+	itemid           INTEGER NOT NULL,
     metakey          TEXT    NOT NULL,
 	metavalue        TEXT    NOT NULL
 );
