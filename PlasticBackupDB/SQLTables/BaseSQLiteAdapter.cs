@@ -9,7 +9,8 @@ namespace PlasticBackupDB.SQLTables
 {
     public class BaseSQLiteAdapter
     {
-        SQLiteConnection myConnection;
+
+        public SQLiteConnection myConnection { get; set; }
 
         private BaseSQLiteAdapter() { }
 
@@ -17,5 +18,6 @@ namespace PlasticBackupDB.SQLTables
         {
             myConnection = conn;
         }
+
     }
 }

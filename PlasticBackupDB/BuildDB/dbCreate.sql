@@ -20,7 +20,7 @@ CREATE TABLE MetadataItems (
     id        INTEGER PRIMARY KEY
                       NOT NULL,
 	isFolder  BOOLEAN NOT NULL,
-    sourceid  INTEGER NOT NULL
+    sourceid  INTEGER NOT NULL -- Search in folder\file table based on `isFolder`
 );
 
 CREATE TABLE MetadataValues (
