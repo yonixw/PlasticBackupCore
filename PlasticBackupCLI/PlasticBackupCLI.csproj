@@ -55,6 +55,12 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PlasticBackupCore\PlasticBackupCore.csproj">
+      <Project>{2d9a1996-c39c-4190-8b6f-4efc9320ccc0}</Project>
+      <Name>PlasticBackupCore</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
