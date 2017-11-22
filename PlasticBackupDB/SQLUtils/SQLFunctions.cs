@@ -6,7 +6,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.IO;
 
-namespace PlasticBackupDB.SQLTables
+namespace PlasticBackupDB.SQLUtils
 {
     public class SQLFunctions 
     {

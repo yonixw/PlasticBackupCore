@@ -5,7 +5,7 @@ using System.Text;
 using System.Data.SQLite;
 using System.Data.Common;
 
-namespace PlasticBackupDB.SQLTables
+namespace PlasticBackupDB.SQLUtils
 {
     public class SQLConnection
     {

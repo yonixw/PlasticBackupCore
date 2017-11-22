@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PlasticBackupDB.SQLTables;
+using PlasticBackupDB.SQLUtils;
 using PlasticBackupSQLiteDB;
 
 namespace PlasticBackupSQLiteDB.Test

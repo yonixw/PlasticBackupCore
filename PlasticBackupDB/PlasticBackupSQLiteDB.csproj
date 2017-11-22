@@ -49,9 +49,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SQLTables\SQLConnection.cs" />
-    <Compile Include="SQLTables\SQLFunctions.cs" />
-    <Compile Include="SQLTables\SQLQueries.cs" />
+    <Compile Include="SQLUtils\SQLCommand.cs" />
+    <Compile Include="SQLUtils\SQLConnection.cs" />
+    <Compile Include="SQLUtils\SQLFunctions.cs" />
+    <Compile Include="SQLUtils\SQLQueries.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
