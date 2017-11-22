@@ -8,17 +8,8 @@ using System.IO;
 
 namespace PlasticBackupDB.SQLTables
 {
-    class SQLFunctions 
+    public class SQLFunctions 
     {
-
-        public SQLiteConnection myConnection { get; set; }
-
-        private SQLFunctions() { }
-
-        public SQLFunctions(SQLiteConnection conn)
-        {
-            myConnection = conn;
-        }
 
         // ------   FolderTree Table  ----------
 
