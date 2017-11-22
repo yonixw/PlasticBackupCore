@@ -13,20 +13,22 @@ CREATE TABLE Files (
 );
 
 -- More information, when source is either a file or a folder.
--- One file can have 2 meta items (e.g. all win pc have some C:\Windows\...\?.dll alike)
+-- One file can have 2 meta instance (e.g. all win pc have some C:\Windows\...\?.dll alike)
 -- New path of file is only determined by it's hash metadata. No duplicates!
 
-CREATE TABLE MetadataItems (
+CREATE TABLE MetadataInstances (
     id        INTEGER PRIMARY KEY
                       NOT NULL,
 	isFolder  BOOLEAN NOT NULL,
     sourceid  INTEGER NOT NULL -- Search in folder\file table based on `isFolder`
 );
 
-CREATE TABLE MetadataValues (
+-- Each Instance have <key,value> pairs of metadata.
+
+CREATE TABLE MetadataItems (
 	id        INTEGER PRIMARY KEY
                       NOT NULL,
-	itemid           INTEGER NOT NULL,
+	instanceid       INTEGER NOT NULL,
     metakey          TEXT    NOT NULL,
 	metavalue        TEXT    NOT NULL
 );

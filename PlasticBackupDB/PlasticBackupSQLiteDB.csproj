@@ -49,8 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SQLTables\BaseSQLiteAdapter.cs" />
-    <Compile Include="SQLTables\DB_FolderTree.cs" />
+    <Compile Include="SQLTables\SQLFunctions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
