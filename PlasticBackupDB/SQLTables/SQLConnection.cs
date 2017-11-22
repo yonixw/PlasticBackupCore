@@ -28,5 +28,19 @@ namespace PlasticBackupDB.SQLTables
             if (myConnection.State == System.Data.ConnectionState.Open)
                 myConnection.Close();
         }
+
+        public List<string> GetAllTables() {
+            List<string> result = new List<string>();
+
+            SQLiteCommand com = new SQLiteCommand(SQLQueries.GET_ALL_TABLES , myConnection);
+            SQLiteDataReader reader = com.ExecuteReader();
+            while(reader.Read())
+            {
+                result.Add(reader["name"] as string);
+            }
+
+            return result;
+        }
+
     }
 }

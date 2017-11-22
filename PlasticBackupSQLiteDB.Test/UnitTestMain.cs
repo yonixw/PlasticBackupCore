@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PlasticBackupDB.SQLTables;
 using PlasticBackupSQLiteDB;
@@ -24,7 +26,9 @@ namespace PlasticBackupSQLiteDB.Test
                 );
             conn.Open();
 
-            
+            List<string> tables = conn.GetAllTables();
+            Trace.WriteLine("Has " + tables.Count + " Tables.");
+            Assert.IsFalse(tables.Count == 0);
 
             conn.Close();
         }
