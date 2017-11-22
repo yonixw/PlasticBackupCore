@@ -103,9 +103,9 @@ namespace PlasticBackupDB.SQLData
                     {
                         return new FolderTreeRow()
                         {
-                            id = Convert.ToInt32(reader["id"]),
+                            id = Convert.ToInt64(reader["id"]),
                             folderName = reader["name"] as string,
-                            parentid = Convert.ToInt32(reader["parentid"]),
+                            parentid = Convert.ToInt64(reader["parentid"]),
                             error = false
                         };
                     }
@@ -140,9 +140,9 @@ namespace PlasticBackupDB.SQLData
                     {
                         return new FolderTreeRow()
                         {
-                            id = Convert.ToInt32(reader["id"]),
+                            id = Convert.ToInt64(reader["id"]),
                             folderName = reader["name"] as string,
-                            parentid = Convert.ToInt32(reader["parentid"]),
+                            parentid = Convert.ToInt64(reader["parentid"]),
                             error = false
                         };
                     }
