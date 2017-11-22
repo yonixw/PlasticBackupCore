@@ -53,18 +53,8 @@ namespace PlasticBackupDB.SQLUtils
             sqlParams = _sqlParams;
 
 
-            command = new SQLiteCommand(_sql);
+            
 
-            if (sqlParams != null)
-            {
-                foreach (SQLParam p in sqlParams)
-                {
-                    SQLiteParameter param = command.CreateParameter();
-                    param.ParameterName = p.name;
-                    param.DbType = getDBType(p.paramType);
-                    command.Parameters.Add(param);
-                } 
-            }
         }
 
         // Setup before running:
@@ -74,53 +64,65 @@ namespace PlasticBackupDB.SQLUtils
             if (sqlParams != null && paramValues != null)
             {
                 for (int i = 0;
-                        i < Math.Min(paramValues.Count, command.Parameters.Count);
+                        i < Math.Min(paramValues.Count, sqlParams.Count);
                         i++)
                 {
-                    command.Parameters[i].Value = paramValues[i];
+                    SQLiteParameter param = command.CreateParameter();
+                    param.ParameterName = sqlParams[i].name;
+                    param.DbType = getDBType(sqlParams[i].paramType);
+                    param.Value = paramValues[i];
+                    command.Parameters.Add(param);
                 } 
             }
-            command.Connection = myConnection.myConnection;
         }
 
         // Running the Command:
 
         public int ExecuteNonScalar(List<object> paramValues)
         {
-            updateParamsAndConnection(paramValues);
+            using (command = new SQLiteCommand(sql, myConnection.myConnection))
+            {
+                updateParamsAndConnection(paramValues);
 
-            command.Connection.Open();
-            int result =  command.ExecuteNonQuery();
-            command.Connection.Close();
+                command.Connection.Open();
+                int result = command.ExecuteNonQuery();
+                command.Connection.Close(); 
 
-            return result;
+                return result;
+            }
         }
 
         public List<T> ExecuteReadAll<T>(List<object> paramValues, Func<DbDataReader, T> readFunc)
         {
-            List<T> result = new List<T>();
-            updateParamsAndConnection(paramValues);
-
-            command.Connection.Open();
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read())
+            using (command = new SQLiteCommand(sql, myConnection.myConnection))
             {
-                result.Add(readFunc(reader));
-            }
-            command.Connection.Close();
+                List<T> result = new List<T>();
+                updateParamsAndConnection(paramValues);
 
-            return result;
+                command.Connection.Open();
+                SQLiteDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    result.Add(readFunc(reader));
+                }
+                command.Connection.Close();
+
+                return result; 
+            }
         }
 
         public object ExecuteScalar(List<object> paramValues)
         {
-            updateParamsAndConnection(paramValues);
+            using (command = new SQLiteCommand(sql, myConnection.myConnection))
+            {
+                updateParamsAndConnection(paramValues);
 
-            command.Connection.Open();
-            object result = command.ExecuteScalar();
-            command.Connection.Close();
+                command.Connection.Open();
+                object result = command.ExecuteScalar();
+                command.Connection.Close();
 
-            return result;
+                return result; 
+            }
         }
 
     }
