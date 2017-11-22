@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlasticBackupCLI", "Plastic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlasticBackupSQLiteDB", "PlasticBackupDB\PlasticBackupSQLiteDB.csproj", "{A242B530-50A7-4C60-92F3-8703C69C2CBE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlasticBackupSQLiteDB.Test", "PlasticBackupSQLiteDB.Test\PlasticBackupSQLiteDB.Test.csproj", "{F44585C3-9A8F-4AFA-AFA0-9C6DA7654B4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A242B530-50A7-4C60-92F3-8703C69C2CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A242B530-50A7-4C60-92F3-8703C69C2CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A242B530-50A7-4C60-92F3-8703C69C2CBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F44585C3-9A8F-4AFA-AFA0-9C6DA7654B4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F44585C3-9A8F-4AFA-AFA0-9C6DA7654B4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F44585C3-9A8F-4AFA-AFA0-9C6DA7654B4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F44585C3-9A8F-4AFA-AFA0-9C6DA7654B4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
