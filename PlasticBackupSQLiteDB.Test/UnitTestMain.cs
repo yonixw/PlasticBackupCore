@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PlasticBackupDB.SQLUtils;
+using PlasticBackupDB.SQLData;
 using PlasticBackupSQLiteDB;
 
 namespace PlasticBackupSQLiteDB.Test
@@ -39,13 +40,13 @@ namespace PlasticBackupSQLiteDB.Test
         {
             conn.Open();
 
-            SQLFunctions func = new SQLFunctions();
-            func.myConnection = conn;
+            FolderTree FolderTreefunc = new FolderTree();
+            FolderTreefunc.myConnection = conn;
 
             List<string> testPath = new List<string>();
-            testPath.AddRange(new[] { "C:", "Folder1", "Folder Space" , "utfשלום" });
+            testPath.AddRange(new[] { "C:", "Folder1", "Folder Space", "utfשלום" });
 
-            SQLFunctions.FolderTreeRow folder = func.createOrFindFolder(testPath);
+            FolderTree.FolderTreeRow folder = FolderTreefunc.createOrFindFolder(testPath);
 
             Assert.IsNotNull(folder);
 
@@ -55,7 +56,7 @@ namespace PlasticBackupSQLiteDB.Test
             // Check if id is legit.
             Assert.IsTrue(folder.id > 0);
 
-            SQLFunctions.FolderTreeRow folder2 = func.createOrFindFolder(testPath);
+            FolderTree.FolderTreeRow folder2 = FolderTreefunc.createOrFindFolder(testPath);
 
             // Check if both result ids are the same ==> same folder in db.
             Assert.Equals(folder.id, folder2.id);
