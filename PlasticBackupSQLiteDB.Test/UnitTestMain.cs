@@ -18,17 +18,47 @@ namespace PlasticBackupSQLiteDB.Test
                 relativePath);
         }
 
+        SQLConnection conn = new SQLConnection(
+               "PlasticBackupSQLiteDB_Debug.sqlite3"
+               );
+
         [TestMethod]
-        public void TestConnection()
+        public void TestConnectionListTables()
         {
-            SQLConnection conn = new SQLConnection(
-                "PlasticBackupSQLiteDB_Debug.sqlite3"
-                );
             conn.Open();
 
             List<string> tables = conn.GetAllTables();
             Trace.WriteLine("Has " + tables.Count + " Tables.");
-            Assert.IsFalse(tables.Count == 0);
+            Assert.IsTrue(tables.Count > 0);
+
+            conn.Close();
+        }
+
+        [TestMethod]
+        public void AddFolderAndSearchIt()
+        {
+            conn.Open();
+
+            SQLFunctions func = new SQLFunctions();
+            func.myConnection = conn;
+
+            List<string> testPath = new List<string>();
+            testPath.AddRange(new[] { "C:", "Folder1", "Folder Space" , "utfשלום" });
+
+            SQLFunctions.FolderTreeRow folder = func.createOrFindFolder(testPath);
+
+            Assert.IsNotNull(folder);
+
+            // Check for errors.
+            Assert.IsTrue(folder.error == false);
+
+            // Check if id is legit.
+            Assert.IsTrue(folder.id > 0);
+
+            SQLFunctions.FolderTreeRow folder2 = func.createOrFindFolder(testPath);
+
+            // Check if both result ids are the same ==> same folder in db.
+            Assert.Equals(folder.id, folder2.id);
 
             conn.Close();
         }

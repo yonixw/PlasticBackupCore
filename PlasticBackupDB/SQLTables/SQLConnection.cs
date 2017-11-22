@@ -42,5 +42,11 @@ namespace PlasticBackupDB.SQLTables
             return result;
         }
 
+        public int RunNonScalar(string SQL)
+        {
+            SQLiteCommand com = new SQLiteCommand(SQL, myConnection);
+            return com.ExecuteNonQuery();
+        }
+
     }
 }

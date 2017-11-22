@@ -10,6 +10,7 @@ namespace PlasticBackupDB.SQLTables
 {
     public class SQLFunctions 
     {
+        public SQLConnection myConnection { get; set; }
 
         // ------   FolderTree Table  ----------
 
