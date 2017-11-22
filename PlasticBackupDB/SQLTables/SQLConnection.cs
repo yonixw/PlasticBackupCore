@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.SQLite;
+using System.Data.Common;
 
 namespace PlasticBackupDB.SQLTables
 {
@@ -47,6 +48,21 @@ namespace PlasticBackupDB.SQLTables
             SQLiteCommand com = new SQLiteCommand(SQL, myConnection);
             return com.ExecuteNonQuery();
         }
+
+        public List<T> ReadAll<T>(string SQL, Func<DbDataReader,T> readFunc)
+        {
+            List<T> result = new List<T>();
+
+            SQLiteCommand com = new SQLiteCommand(SQL, myConnection);
+            SQLiteDataReader reader = com.ExecuteReader();
+            while (reader.Read())
+            {
+                result.Add(readFunc(reader));
+            }
+
+            return result;
+        }
+
 
     }
 }
