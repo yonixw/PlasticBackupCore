@@ -18,9 +18,9 @@ namespace PlasticBackupDB.SQLData
 
         public class FolderTreeRow
         {
-            public int id = -1;
+            public long id = -1;
             public string folderName;
-            public int parentid;
+            public long parentid;
             public bool error = true; // This class has invalid information.
         }
 
@@ -65,7 +65,7 @@ namespace PlasticBackupDB.SQLData
                     new SQLUtils.SQLCommand.SQLParam("@name", SQLUtils.SQLCommand.SQLParam.sqliteType.TEXT)
                 });
 
-        FolderTreeRow newFolder(int parentid, string partname)
+        FolderTreeRow newFolder(long parentid, string partname)
         {
             FolderTreeRow result = new FolderTreeRow();
 
@@ -75,7 +75,7 @@ namespace PlasticBackupDB.SQLData
                 );
 
             // Get last index:
-            int folderId = getLastSequence();
+            long folderId = getLastSequence();
 
             // Return folder:
             result = findFolderByID(folderId);
@@ -91,7 +91,7 @@ namespace PlasticBackupDB.SQLData
                     new SQLUtils.SQLCommand.SQLParam("@id", SQLUtils.SQLCommand.SQLParam.sqliteType.INTEGER),
                 });
 
-        FolderTreeRow findFolderByID(int rowid)
+        FolderTreeRow findFolderByID(long rowid)
         {
             FolderTreeRow result = new FolderTreeRow();
 
@@ -127,7 +127,7 @@ namespace PlasticBackupDB.SQLData
                     new SQLUtils.SQLCommand.SQLParam("@name", SQLUtils.SQLCommand.SQLParam.sqliteType.TEXT)
                });
 
-        FolderTreeRow findFolderByParentAndName(int parentid, string partname)
+        FolderTreeRow findFolderByParentAndName(long parentid, string partname)
         {
             FolderTreeRow result = new FolderTreeRow();
 
@@ -159,12 +159,12 @@ namespace PlasticBackupDB.SQLData
                @"SELECT seq FROM sqlite_sequence WHERE name = 'FolderTree'",
                null);
 
-        int getLastSequence()
+        long getLastSequence()
         {
-            List<int> seq =
-                SQL_FOLDERTREE_lastSequence.ExecuteReadAll<int>(
+            List<long> seq =
+                SQL_FOLDERTREE_lastSequence.ExecuteReadAll(
                     null,
-                    (reader) => { return (reader["seq"] as int?) ?? -1; }
+                    (reader) => { return (reader["seq"] as long?) ?? -1; }
                     );
 
             if (seq.Count != 1) throw new Exception("Can't read sequence counter. try after insert/delete");

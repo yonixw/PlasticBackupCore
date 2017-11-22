@@ -9,9 +9,9 @@ namespace PlasticBackupDB.SQLData
     {
         public abstract class MetaInstanceRow
         {
-            public int id = -1;
+            public long id = -1;
             private bool isFolder; // Only for inner uses
-            public int sourceid;
+            public long sourceid;
             public bool error = true; // This class has invalid information.
         }
 

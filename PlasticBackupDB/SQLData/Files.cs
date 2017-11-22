@@ -9,9 +9,9 @@ namespace PlasticBackupDB.SQLData
     {
         public class FileRow
         {
-            public int id = -1;
+            public long id = -1;
             public string fileName;
-            public int myFolderId;
+            public long myFolderId;
             public bool error = true; // This class has invalid information.
         }
 

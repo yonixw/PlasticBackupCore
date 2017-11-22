@@ -11,8 +11,8 @@ namespace PlasticBackupDB.SQLData
 
         public class MetadataItemRow
         {
-            public int id = -1;
-            public int instanceid = -1;
+            public long id = -1;
+            public long instanceid = -1;
             string metakey;
             string metavalue;
             public bool error = true; // This class has invalid information.
