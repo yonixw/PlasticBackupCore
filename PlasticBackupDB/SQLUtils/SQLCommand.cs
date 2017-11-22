@@ -35,6 +35,7 @@ namespace PlasticBackupDB.SQLUtils
 
         List<SQLParam> sqlParams;
         SQLiteCommand command { get; set; }
+        public SQLConnection myConnection { get; set; }
 
         System.Data.DbType getDBType(SQLParam.sqliteType type)
         {
@@ -46,13 +47,13 @@ namespace PlasticBackupDB.SQLUtils
             return System.Data.DbType.Object;
         }
 
-        public SQLCommand(string _sql, List<SQLParam> _sqlParams, SQLConnection conn)
+        public SQLCommand(string _sql, List<SQLParam> _sqlParams)
         {
             sql = _sql;
             sqlParams = _sqlParams;
 
 
-            command = new SQLiteCommand(_sql, conn.myConnection);
+            command = new SQLiteCommand(_sql);
             command.CreateParameter();
 
             foreach (SQLParam p in sqlParams)
@@ -64,7 +65,7 @@ namespace PlasticBackupDB.SQLUtils
             }
         }
 
-        void updateParams(List<object> paramValues)
+        void updateParamsAndConnection(List<object> paramValues)
         {
             for(int i=0;
                 i<Math.Min(paramValues.Count, command.Parameters.Count);
@@ -72,18 +73,19 @@ namespace PlasticBackupDB.SQLUtils
             {
                 command.Parameters[i].Value = paramValues[i];
             }
+            command.Connection = myConnection.myConnection;
         }
 
         public int ExecuteNonScalar(List<object> paramValues)
         {
-            updateParams(paramValues);
+            updateParamsAndConnection(paramValues);
             return command.ExecuteNonQuery();
         }
 
         public List<T> ExecuteReadAll<T>(List<object> paramValues, Func<DbDataReader, T> readFunc)
         {
             List<T> result = new List<T>();
-            updateParams(paramValues);
+            updateParamsAndConnection(paramValues);
 
             SQLiteDataReader reader = command.ExecuteReader();
             while (reader.Read())
@@ -96,7 +98,7 @@ namespace PlasticBackupDB.SQLUtils
 
         public object ExecuteScalar(List<object> paramValues)
         {
-            updateParams(paramValues);
+            updateParamsAndConnection(paramValues);
             return command.ExecuteScalar();
         }
 

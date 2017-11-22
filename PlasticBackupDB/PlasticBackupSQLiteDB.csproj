@@ -56,7 +56,7 @@
     <Compile Include="SQLUtils\SQLCommand.cs" />
     <Compile Include="SQLUtils\SQLConnection.cs" />
     <Compile Include="SQLUtils\SQLFunctions.cs" />
-    <Compile Include="SQLUtils\SQLQueries.cs" />
+    <Compile Include="SQLData\SQLQueries.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
