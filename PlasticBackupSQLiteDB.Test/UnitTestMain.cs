@@ -54,10 +54,13 @@ namespace PlasticBackupSQLiteDB.Test
             // Check if id is legit.
             Assert.IsTrue(folder.id > 0);
 
+            // Check if parent id is legit because we are not root but a leaf in FolderTree.
+            Assert.IsTrue(folder.parentid > 0);
+
             FolderTree.FolderTreeRow folder2 = FolderTreefunc.createOrFindFolder(testPath);
 
             // Check if both result ids are the same ==> same folder in db.
-            Assert.Equals(folder.id, folder2.id);
+            Assert.AreEqual(folder.id, folder2.id);
 
         }
     }

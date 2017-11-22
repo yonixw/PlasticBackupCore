@@ -101,9 +101,9 @@ namespace PlasticBackupDB.SQLData
                     (reader) => {
                         return new FolderTreeRow()
                         {
-                            id = (reader["id"] as int?) ?? -1,
+                            id = (reader["id"] as long?) ?? -1,
                             folderName = reader["name"] as string,
-                            parentid = reader["parentid"] as int? ?? -1,
+                            parentid = reader["parentid"] as long? ?? -1,
                             error = false
                         };
                     }
@@ -137,9 +137,9 @@ namespace PlasticBackupDB.SQLData
                     (reader) => {
                         return new FolderTreeRow()
                         {
-                            id = (reader["id"] as int?) ?? -1,
+                            id = (reader["id"] as long?) ?? -1,
                             folderName = reader["name"] as string,
-                            parentid = reader["parentid"] as int? ?? -1,
+                            parentid = reader["parentid"] as long? ?? -1,
                             error = false
                         };
                     }
