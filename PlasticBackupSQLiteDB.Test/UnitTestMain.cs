@@ -38,13 +38,11 @@ namespace PlasticBackupSQLiteDB.Test
         [TestMethod]
         public void AddFolderAndSearchIt()
         {
-            conn.Open();
 
-            FolderTree FolderTreefunc = new FolderTree();
-            FolderTreefunc.myConnection = conn;
+            FolderTree FolderTreefunc = new FolderTree(conn);
 
             List<string> testPath = new List<string>();
-            testPath.AddRange(new[] { "C:", "Folder1", "Folder Space", "utfשלום" });
+            testPath.AddRange(new[] { "MY-PC", "C:", "Folder1", "Folder Space", "utfשלום" });
 
             FolderTree.FolderTreeRow folder = FolderTreefunc.createOrFindFolder(testPath);
 
@@ -61,7 +59,6 @@ namespace PlasticBackupSQLiteDB.Test
             // Check if both result ids are the same ==> same folder in db.
             Assert.Equals(folder.id, folder2.id);
 
-            conn.Close();
         }
     }
 }
