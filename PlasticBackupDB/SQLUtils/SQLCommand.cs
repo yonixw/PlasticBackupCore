@@ -54,32 +54,46 @@ namespace PlasticBackupDB.SQLUtils
 
 
             command = new SQLiteCommand(_sql);
-            command.CreateParameter();
 
-            foreach (SQLParam p in sqlParams)
+            if (sqlParams != null)
             {
-                SQLiteParameter param = command.CreateParameter();
-                param.ParameterName = p.name;
-                param.DbType = getDBType(p.paramType);
-                command.Parameters.Add(param);
+                foreach (SQLParam p in sqlParams)
+                {
+                    SQLiteParameter param = command.CreateParameter();
+                    param.ParameterName = p.name;
+                    param.DbType = getDBType(p.paramType);
+                    command.Parameters.Add(param);
+                } 
             }
         }
 
+        // Setup before running:
+
         void updateParamsAndConnection(List<object> paramValues)
         {
-            for(int i=0;
-                i<Math.Min(paramValues.Count, command.Parameters.Count);
-                i++)
+            if (sqlParams != null && paramValues != null)
             {
-                command.Parameters[i].Value = paramValues[i];
+                for (int i = 0;
+                        i < Math.Min(paramValues.Count, command.Parameters.Count);
+                        i++)
+                {
+                    command.Parameters[i].Value = paramValues[i];
+                } 
             }
             command.Connection = myConnection.myConnection;
         }
 
+        // Running the Command:
+
         public int ExecuteNonScalar(List<object> paramValues)
         {
             updateParamsAndConnection(paramValues);
-            return command.ExecuteNonQuery();
+
+            command.Connection.Open();
+            int result =  command.ExecuteNonQuery();
+            command.Connection.Close();
+
+            return result;
         }
 
         public List<T> ExecuteReadAll<T>(List<object> paramValues, Func<DbDataReader, T> readFunc)
@@ -87,11 +101,13 @@ namespace PlasticBackupDB.SQLUtils
             List<T> result = new List<T>();
             updateParamsAndConnection(paramValues);
 
+            command.Connection.Open();
             SQLiteDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
                 result.Add(readFunc(reader));
             }
+            command.Connection.Close();
 
             return result;
         }
@@ -99,7 +115,12 @@ namespace PlasticBackupDB.SQLUtils
         public object ExecuteScalar(List<object> paramValues)
         {
             updateParamsAndConnection(paramValues);
-            return command.ExecuteScalar();
+
+            command.Connection.Open();
+            object result = command.ExecuteScalar();
+            command.Connection.Close();
+
+            return result;
         }
 
     }
