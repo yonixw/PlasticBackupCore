@@ -20,7 +20,7 @@ namespace PlasticBackupDB.SQLData
         {
             public long id = -1;
             public string folderName;
-            public long parentid;
+            public long parentid = -1;
             public bool error = true; // This class has invalid information.
         }
 
@@ -30,20 +30,21 @@ namespace PlasticBackupDB.SQLData
         {
             // For each part, find o.w. insert and continue.
             FolderTreeRow lastFolder = new FolderTreeRow();
-           
+
             foreach (string folder in pathList)
             {
-                lastFolder = findFolderByParentAndName(lastFolder.parentid, folder);
+                FolderTreeRow nextFolder = findFolderByParentAndName(lastFolder.id, folder);
 
-                if (!lastFolder.error)
+                if (!nextFolder.error)
                 {
                     // folder exist! next one!
                 }
                 else
                 {
                     // Create and get it!
-                    lastFolder = newFolder(lastFolder.id, folder);
+                    nextFolder = newFolder(lastFolder.id, folder);
                 }
+                lastFolder = nextFolder;
             }
 
             return lastFolder;
@@ -98,12 +99,13 @@ namespace PlasticBackupDB.SQLData
             List<FolderTreeRow> rows = new List<FolderTreeRow>();
             rows = SQL_FOLDERTREE_selectById.ExecuteReadAll<FolderTreeRow>(
                     new List<object>() { rowid },
-                    (reader) => {
+                    (reader) =>
+                    {
                         return new FolderTreeRow()
                         {
-                            id = (reader["id"] as long?) ?? -1,
+                            id = Convert.ToInt32(reader["id"]),
                             folderName = reader["name"] as string,
-                            parentid = reader["parentid"] as long? ?? -1,
+                            parentid = Convert.ToInt32(reader["parentid"]),
                             error = false
                         };
                     }
@@ -134,12 +136,13 @@ namespace PlasticBackupDB.SQLData
             List<FolderTreeRow> rows = new List<FolderTreeRow>();
             rows = SQL_FOLDERTREE_selectByParentAndName.ExecuteReadAll<FolderTreeRow>(
                     new List<object>() { parentid, partname },
-                    (reader) => {
+                    (reader) =>
+                    {
                         return new FolderTreeRow()
                         {
-                            id = (reader["id"] as long?) ?? -1,
+                            id = Convert.ToInt32(reader["id"]),
                             folderName = reader["name"] as string,
-                            parentid = reader["parentid"] as long? ?? -1,
+                            parentid = Convert.ToInt32(reader["parentid"]),
                             error = false
                         };
                     }
@@ -164,7 +167,7 @@ namespace PlasticBackupDB.SQLData
             List<long> seq =
                 SQL_FOLDERTREE_lastSequence.ExecuteReadAll(
                     null,
-                    (reader) => { return (reader["seq"] as long?) ?? -1; }
+                    (reader) => { return Convert.ToInt64(reader["seq"]); }
                     );
 
             if (seq.Count != 1) throw new Exception("Can't read sequence counter. try after insert/delete");
