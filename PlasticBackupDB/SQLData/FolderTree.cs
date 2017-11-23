@@ -14,6 +14,7 @@ namespace PlasticBackupDB.SQLData
             SQL_FOLDERTREE_selectById.myConnection = conn;
             SQL_FOLDERTREE_selectByParentAndName.myConnection = conn;
             SQL_FOLDERTREE_lastSequence.myConnection = conn;
+            SQL_FOLDERTREE_selectByParentID.myConnection = conn;
         }
 
         public class FolderTreeRow
@@ -24,7 +25,12 @@ namespace PlasticBackupDB.SQLData
             public bool error = true; // This class has invalid information.
         }
 
-        public FolderTreeRow createOrFindChildFolder(FolderTreeRow parentFolder, string newName) { return null; }
+        public FolderTreeRow createOrFindChildFolder(FolderTreeRow parentFolder, string newName) {
+            FolderTreeRow result = findFolderByParentAndName(parentFolder.id, newName);
+            if (result.error)
+                result = newFolder(parentFolder.id, newName);
+            return result;
+        }
 
         public FolderTreeRow createOrFindFolder(List<string> pathList)
         {
@@ -50,7 +56,9 @@ namespace PlasticBackupDB.SQLData
             return lastFolder;
         }
 
-        public List<FolderTreeRow> getSubFolders(FolderTreeRow folder) { return null; }
+        public List<FolderTreeRow> getSubFolders(FolderTreeRow folder) {
+            return findFoldersByParentID(folder.id);
+        }
 
 
         // ************************
@@ -153,6 +161,34 @@ namespace PlasticBackupDB.SQLData
                 result = rows[0];
             else if (rows.Count > 1)
                 throw new Exception("Multiple folder with same name under same parent?");
+
+            return result;
+        }
+
+        public SQLUtils.SQLCommand SQL_FOLDERTREE_selectByParentID =
+          new SQLUtils.SQLCommand(
+              @"SELECT * FROM FolderTree WHERE parentid = @parentid",
+              new List<SQLUtils.SQLCommand.SQLParam>()
+              {
+                    new SQLUtils.SQLCommand.SQLParam("@parentid", SQLUtils.SQLCommand.SQLParam.sqliteType.INTEGER),
+              });
+
+        List<FolderTreeRow> findFoldersByParentID(long parentid)
+        {
+            List<FolderTreeRow> result = new List<FolderTreeRow>();
+            result = SQL_FOLDERTREE_selectByParentID.ExecuteReadAll<FolderTreeRow>(
+                    new List<object>() { parentid },
+                    (reader) =>
+                    {
+                        return new FolderTreeRow()
+                        {
+                            id = Convert.ToInt64(reader["id"]),
+                            folderName = reader["name"] as string,
+                            parentid = Convert.ToInt64(reader["parentid"]),
+                            error = false
+                        };
+                    }
+                );
 
             return result;
         }
