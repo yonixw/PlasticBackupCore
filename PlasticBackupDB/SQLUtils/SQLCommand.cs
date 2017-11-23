@@ -80,6 +80,9 @@ namespace PlasticBackupDB.SQLUtils
 
         public int ExecuteNonScalar(List<object> paramValues)
         {
+            if (myConnection == null)
+                throw new Exception("Connection is null in command.");
+                
             using (command = new SQLiteCommand(sql, myConnection.myConnection))
             {
                 updateParamsAndConnection(paramValues);
@@ -94,6 +97,9 @@ namespace PlasticBackupDB.SQLUtils
 
         public List<T> ExecuteReadAll<T>(List<object> paramValues, Func<DbDataReader, T> readFunc)
         {
+            if (myConnection == null)
+                throw new Exception("Connection is null in command.");
+
             using (command = new SQLiteCommand(sql, myConnection.myConnection))
             {
                 List<T> result = new List<T>();
@@ -113,6 +119,9 @@ namespace PlasticBackupDB.SQLUtils
 
         public object ExecuteScalar(List<object> paramValues)
         {
+            if (myConnection == null)
+                throw new Exception("Connection is null in command.");
+
             using (command = new SQLiteCommand(sql, myConnection.myConnection))
             {
                 updateParamsAndConnection(paramValues);
