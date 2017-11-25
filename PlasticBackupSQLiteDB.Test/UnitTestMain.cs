@@ -36,6 +36,16 @@ namespace PlasticBackupSQLiteDB.Test
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exception),"sequence already exists?")] 
+        public void checkSequenceDoesntExist()
+        {
+            // Only should exist after insert\delete
+            FolderTree FolderTreefunc = new FolderTree(conn);
+
+            FolderTreefunc.getLastSequence();
+        }
+
+        [TestMethod]
         public void AddFolderAndSearchIt()
         {
 
@@ -104,6 +114,26 @@ namespace PlasticBackupSQLiteDB.Test
 
             Assert.AreEqual(sub2Path.id, sub2.id);
 
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception), "Can't detect multiple")]
+        public void CheckErrorIfDuplicateFolder()
+        {
+            FolderTree FolderTreefunc = new FolderTree(conn);
+
+            List<string> testPath = new List<string>();
+            testPath.AddRange(new[] { "MY-PC2", "D:", "DuplicateSubfolderTest" });
+
+            FolderTree.FolderTreeRow folder = FolderTreefunc.createOrFindFolder(testPath);
+
+            FolderTree.FolderTreeRow sub1 =  FolderTreefunc.createOrFindChildFolder(folder, "name1");
+
+            // Create new folder with same name!
+            FolderTreefunc.SQL_FOLDERTREE_insert.ExecuteNonScalar(new List<object> { folder.id, "name1" });
+
+            // Find the subfolder name1
+            FolderTreefunc.createOrFindChildFolder(folder, "name1");
         }
     }
 }

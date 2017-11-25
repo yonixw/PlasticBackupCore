@@ -122,8 +122,7 @@ namespace PlasticBackupDB.SQLData
             // One id is one folder!!
             if (rows.Count == 1)
                 result = rows[0];
-            else if (rows.Count > 1)
-                throw new Exception("Multiple folder with same rowid?");
+            // Else no id found.
 
             return result;
         }
@@ -198,7 +197,7 @@ namespace PlasticBackupDB.SQLData
                @"SELECT seq FROM sqlite_sequence WHERE name = 'FolderTree'",
                null);
 
-        long getLastSequence()
+        public long getLastSequence()
         {
             List<long> seq =
                 SQL_FOLDERTREE_lastSequence.ExecuteReadAll(
