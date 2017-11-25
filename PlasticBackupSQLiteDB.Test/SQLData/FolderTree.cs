@@ -11,45 +11,29 @@ namespace PlasticBackupSQLiteDB.Test
     [TestClass]
     public class UnitTestMain
     {
-        public static string GetRelativePath(string relativePath)
-        {
-            //https://stackoverflow.com/q/10204091/1997873
-            return
-                System.IO.Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
-                relativePath);
-        }
+        //public static string GetRelativePath(string relativePath)
+        //{
+        //    //https://stackoverflow.com/q/10204091/1997873
+        //    return
+        //        System.IO.Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
+        //        relativePath);
+        //}
 
-        SQLConnection conn = new SQLConnection(
+        FolderTree FolderTreefunc = new FolderTree(new SQLConnection(
                "PlasticBackupSQLiteDB_Debug.sqlite3"
-               );
-
-        [TestMethod]
-        public void TestConnectionListTables()
-        {
-            conn.Open();
-
-            List<string> tables = conn.GetAllTables();
-            Trace.WriteLine("Has " + tables.Count + " Tables.");
-            Assert.IsTrue(tables.Count > 0);
-
-            conn.Close();
-        }
+               ));
 
         [TestMethod]
         [ExpectedException(typeof(Exception),"sequence already exists?")] 
         public void checkSequenceDoesntExist()
         {
             // Only should exist after insert\delete
-            FolderTree FolderTreefunc = new FolderTree(conn);
-
             FolderTreefunc.getLastSequence();
         }
 
         [TestMethod]
         public void AddFolderAndSearchIt()
         {
-
-            FolderTree FolderTreefunc = new FolderTree(conn);
 
             List<string> testPath = new List<string>();
             testPath.AddRange(new[] { "MY-PC", "C:", "Folder1", "Folder Space", "utfשלום" });
@@ -76,8 +60,7 @@ namespace PlasticBackupSQLiteDB.Test
 
         [TestMethod]
         public void AddSubfoldersAndCheckThem()
-        {
-            FolderTree FolderTreefunc = new FolderTree(conn);
+        { 
 
             List<string> testPath = new List<string>();
             testPath.AddRange(new[] { "MY-PC2", "D:", "SubfolderTest"});
@@ -120,7 +103,6 @@ namespace PlasticBackupSQLiteDB.Test
         [ExpectedException(typeof(Exception), "Can't detect multiple")]
         public void CheckErrorIfDuplicateFolder()
         {
-            FolderTree FolderTreefunc = new FolderTree(conn);
 
             List<string> testPath = new List<string>();
             testPath.AddRange(new[] { "MY-PC2", "D:", "DuplicateSubfolderTest" });
@@ -135,5 +117,13 @@ namespace PlasticBackupSQLiteDB.Test
             // Find the subfolder name1
             FolderTreefunc.createOrFindChildFolder(folder, "name1");
         }
+
+        [TestMethod]
+        public void DeleteFolder()
+        {
+
+        }
+
+
     }
 }
