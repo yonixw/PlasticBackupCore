@@ -121,7 +121,20 @@ namespace PlasticBackupSQLiteDB.Test
         [TestMethod]
         public void DeleteFolder()
         {
+            List<string> testPath = new List<string>();
+            testPath.AddRange(new[] { "MY-PC2", "D:", "DeleteSubfolderTest" });
 
+            FolderTree.FolderTreeRow folder = FolderTreefunc.createOrFindFolder(testPath);
+
+            FolderTree.FolderTreeRow sub1 = FolderTreefunc.createOrFindChildFolder(folder, "name1");
+
+            SQLCommand.ResultCode rcode = FolderTreefunc.deleteFolder(sub1);
+
+            Assert.IsTrue(rcode == SQLCommand.ResultCode.SQLITE_OK);
+
+            sub1 = FolderTreefunc.createOrFindChildFolder(folder, "name1");
+
+            Assert.IsTrue(sub1.error); // Not found!
         }
 
 

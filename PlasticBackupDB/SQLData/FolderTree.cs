@@ -210,6 +210,10 @@ namespace PlasticBackupDB.SQLData
         }
 
 
+        public SQLUtils.SQLCommand.ResultCode deleteFolder(FolderTreeRow folder)
+        {
+            return -1;
+        }
 
     }
 }
