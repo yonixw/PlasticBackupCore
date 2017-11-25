@@ -112,14 +112,17 @@ namespace PlasticBackupSQLiteDB.Test
             FolderTree.FolderTreeRow sub1 =  FolderTreefunc.createOrFindChildFolder(folder, "name1");
 
             // Create new folder with same name!
-            FolderTreefunc.SQL_FOLDERTREE_insert.ExecuteNonScalar(new List<object> { folder.id, "name1" });
+            int rowsAdded =
+                FolderTreefunc.SQL_FOLDERTREE_insert.ExecuteNonScalar(new List<object> { folder.id, "name1" });
+
+            Assert.IsTrue(rowsAdded == 1);
 
             // Find the subfolder name1
             FolderTreefunc.createOrFindChildFolder(folder, "name1");
         }
 
         [TestMethod]
-        public void DeleteFolder()
+        public void CheckDeleteFolderAndIdCounter()
         {
             List<string> testPath = new List<string>();
             testPath.AddRange(new[] { "MY-PC2", "D:", "DeleteSubfolderTest" });
@@ -128,13 +131,19 @@ namespace PlasticBackupSQLiteDB.Test
 
             FolderTree.FolderTreeRow sub1 = FolderTreefunc.createOrFindChildFolder(folder, "name1");
 
-            SQLCommand.ResultCode rcode = FolderTreefunc.deleteFolder(sub1);
+            // To make free id `hole` when we delete sub1.
+            FolderTree.FolderTreeRow sub2 = FolderTreefunc.createOrFindChildFolder(folder, "name2");
 
-            Assert.IsTrue(rcode == SQLCommand.ResultCode.SQLITE_OK);
+            long originalId = sub1.id;
 
+            FolderTreefunc.deleteFolder(sub1);
+
+            // Recreate it.
             sub1 = FolderTreefunc.createOrFindChildFolder(folder, "name1");
 
-            Assert.IsTrue(sub1.error); // Not found!
+            Assert.IsTrue(originalId != folder.id); // Different folders! 
+
+            Assert.IsTrue(originalId > folder.id); // Verify ID always go up (not taking back empty ids).
         }
 
 

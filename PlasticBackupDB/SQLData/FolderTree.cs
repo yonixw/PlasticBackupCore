@@ -15,6 +15,7 @@ namespace PlasticBackupDB.SQLData
             SQL_FOLDERTREE_selectByParentAndName.myConnection = conn;
             SQL_FOLDERTREE_lastSequence.myConnection = conn;
             SQL_FOLDERTREE_selectByParentID.myConnection = conn;
+            SQL_FOLDERTREE_deleteById.myConnection = conn;
         }
 
         public class FolderTreeRow
@@ -79,7 +80,7 @@ namespace PlasticBackupDB.SQLData
             FolderTreeRow result = new FolderTreeRow();
 
             // Insert new:
-            int resultCode = SQL_FOLDERTREE_insert.ExecuteNonScalar(
+            int rowsAdded = SQL_FOLDERTREE_insert.ExecuteNonScalar(
                     new List<object>() { parentid, partname }
                 );
 
@@ -210,9 +211,23 @@ namespace PlasticBackupDB.SQLData
         }
 
 
-        public SQLUtils.SQLCommand.ResultCode deleteFolder(FolderTreeRow folder)
+        public SQLUtils.SQLCommand SQL_FOLDERTREE_deleteById =
+            new SQLUtils.SQLCommand(
+                @"DELETE FROM FolderTree WHERE id = @id",
+                new List<SQLUtils.SQLCommand.SQLParam>()
+                {
+                    new SQLUtils.SQLCommand.SQLParam("@id", SQLUtils.SQLCommand.SQLParam.sqliteType.INTEGER),
+                });
+
+        public void deleteFolder(FolderTreeRow folder)
         {
-            return -1;
+            int deletedRowsCount = (int) // https://stackoverflow.com/a/24235553/1997873
+                SQL_FOLDERTREE_deleteById.ExecuteNonScalar(new List<object>() { folder.id });
+
+            //if (deletedRowsCount != 1) Folder already deleted.
+
+            // Invalidate Object.
+            folder.error = true;
         }
 
     }

@@ -115,7 +115,7 @@ namespace PlasticBackupDB.SQLUtils
              SQLITE_DONE      =  101  /* sqlite3_step() has finished executing */
         }
 
-        public ResultCode ExecuteNonScalar(List<object> paramValues)
+        public int ExecuteNonScalar(List<object> paramValues)
         {
             if (myConnection == null)
                 throw new Exception("Connection is null in command.");
@@ -128,7 +128,7 @@ namespace PlasticBackupDB.SQLUtils
                 int result = command.ExecuteNonQuery();
                 command.Connection.Close(); 
 
-                return (ResultCode)result;
+                return result;
             }
         }
 
