@@ -53,8 +53,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTestMain.cs" />
+    <Compile Include="SQLData\FolderTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SQLiteGeneral.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlasticBackupDB\PlasticBackupSQLiteDB.csproj">
