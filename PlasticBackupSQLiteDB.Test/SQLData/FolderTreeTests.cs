@@ -9,7 +9,7 @@ using PlasticBackupSQLiteDB;
 namespace PlasticBackupSQLiteDB.Test
 {
     [TestClass]
-    public class UnitTestMain
+    public class FolderTreeTests
     {
         //public static string GetRelativePath(string relativePath)
         //{
