@@ -113,7 +113,7 @@ namespace PlasticBackupSQLiteDB.Test
 
             // Create new folder with same name!
             int rowsAdded =
-                FolderTreefunc.SQL_FOLDERTREE_insert.ExecuteNonScalar(new List<object> { folder.id, "name1" });
+                FolderTreefunc.SQL_FOLDERTREE_insert.ExecuteNonScalar(new List<object> { folder.id, "name1" }, FolderTreefunc.myConnection);
 
             Assert.IsTrue(rowsAdded == 1);
 

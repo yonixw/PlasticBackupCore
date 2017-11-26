@@ -9,13 +9,7 @@ namespace PlasticBackupDB.SQLData
     {
         public FolderTree(SQLUtils.SQLConnection conn)
         {
-            // Prepare the commands:
-            SQL_FOLDERTREE_insert.myConnection = conn;
-            SQL_FOLDERTREE_selectById.myConnection = conn;
-            SQL_FOLDERTREE_selectByParentAndName.myConnection = conn;
-            SQL_FOLDERTREE_lastSequence.myConnection = conn;
-            SQL_FOLDERTREE_selectByParentID.myConnection = conn;
-            SQL_FOLDERTREE_deleteById.myConnection = conn;
+            myConnection = conn;
         }
 
         public class FolderTreeRow
@@ -81,7 +75,7 @@ namespace PlasticBackupDB.SQLData
 
             // Insert new:
             int rowsAdded = SQL_FOLDERTREE_insert.ExecuteNonScalar(
-                    new List<object>() { parentid, partname }
+                    new List<object>() { parentid, partname } , myConnection
                 );
 
             // Get last index:
@@ -117,7 +111,7 @@ namespace PlasticBackupDB.SQLData
                             parentid = Convert.ToInt64(reader["parentid"]),
                             error = false
                         };
-                    }
+                    } , myConnection
                 );
 
             // One id is one folder!!
@@ -153,7 +147,7 @@ namespace PlasticBackupDB.SQLData
                             parentid = Convert.ToInt64(reader["parentid"]),
                             error = false
                         };
-                    }
+                    }, myConnection
                 );
 
             // Like real folders only one unique name under each parent!
@@ -187,7 +181,7 @@ namespace PlasticBackupDB.SQLData
                             parentid = Convert.ToInt64(reader["parentid"]),
                             error = false
                         };
-                    }
+                    }, myConnection
                 );
 
             return result;
@@ -203,7 +197,8 @@ namespace PlasticBackupDB.SQLData
             List<long> seq =
                 SQL_FOLDERTREE_lastSequence.ExecuteReadAll(
                     null,
-                    (reader) => { return Convert.ToInt64(reader["seq"]); }
+                    (reader) => { return Convert.ToInt64(reader["seq"]); },
+                    myConnection
                     );
 
             if (seq.Count != 1) throw new Exception("Can't read sequence counter. try after insert/delete");
@@ -222,7 +217,7 @@ namespace PlasticBackupDB.SQLData
         public void deleteFolder(FolderTreeRow folder)
         {
             int deletedRowsCount = (int) // https://stackoverflow.com/a/24235553/1997873
-                SQL_FOLDERTREE_deleteById.ExecuteNonScalar(new List<object>() { folder.id });
+                SQL_FOLDERTREE_deleteById.ExecuteNonScalar(new List<object>() { folder.id }, myConnection);
 
             //if (deletedRowsCount != 1) Folder already deleted.
 

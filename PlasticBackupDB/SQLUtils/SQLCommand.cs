@@ -35,7 +35,6 @@ namespace PlasticBackupDB.SQLUtils
 
         List<SQLParam> sqlParams;
         SQLiteCommand command { get; set; }
-        public SQLConnection myConnection { get; set; }
 
         System.Data.DbType getDBType(SQLParam.sqliteType type)
         {
@@ -51,10 +50,6 @@ namespace PlasticBackupDB.SQLUtils
         {
             sql = _sql;
             sqlParams = _sqlParams;
-
-
-            
-
         }
 
         // Setup before running:
@@ -115,12 +110,12 @@ namespace PlasticBackupDB.SQLUtils
              SQLITE_DONE      =  101  /* sqlite3_step() has finished executing */
         }
 
-        public int ExecuteNonScalar(List<object> paramValues)
+        public int ExecuteNonScalar(List<object> paramValues, SQLConnection conn)
         {
-            if (myConnection == null)
+            if (conn == null)
                 throw new Exception("Connection is null in command.");
                 
-            using (command = new SQLiteCommand(sql, myConnection.myConnection))
+            using (command = new SQLiteCommand(sql, conn.myConnection))
             {
                 updateParamsAndConnection(paramValues);
 
@@ -132,12 +127,12 @@ namespace PlasticBackupDB.SQLUtils
             }
         }
 
-        public List<T> ExecuteReadAll<T>(List<object> paramValues, Func<DbDataReader, T> readFunc)
+        public List<T> ExecuteReadAll<T>(List<object> paramValues, Func<DbDataReader, T> readFunc, SQLConnection conn)
         {
-            if (myConnection == null)
+            if (conn == null)
                 throw new Exception("Connection is null in command.");
 
-            using (command = new SQLiteCommand(sql, myConnection.myConnection))
+            using (command = new SQLiteCommand(sql, conn.myConnection))
             {
                 List<T> result = new List<T>();
                 updateParamsAndConnection(paramValues);
@@ -154,12 +149,12 @@ namespace PlasticBackupDB.SQLUtils
             }
         }
 
-        public object ExecuteScalar(List<object> paramValues)
+        public object ExecuteScalar(List<object> paramValues, SQLConnection conn)
         {
-            if (myConnection == null)
+            if (conn == null)
                 throw new Exception("Connection is null in command.");
 
-            using (command = new SQLiteCommand(sql, myConnection.myConnection))
+            using (command = new SQLiteCommand(sql, conn.myConnection))
             {
                 updateParamsAndConnection(paramValues);
 
