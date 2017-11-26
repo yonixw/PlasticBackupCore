@@ -8,6 +8,7 @@ using PlasticBackupDB.SQLUtils;
 
 namespace PlasticBackupSQLiteDB.Test
 {
+    [TestClass]
     class SQLiteGeneral
     {
         SQLConnection conn = new SQLConnection(
