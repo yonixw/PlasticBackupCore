@@ -7,9 +7,8 @@ namespace PlasticBackupDB.SQLData
 {
     public class FolderTree : SQLUtils.SQLFunctions
     {
-        public FolderTree(SQLUtils.SQLConnection conn)
+        public FolderTree(SQLUtils.SQLConnection conn) : base(conn)
         {
-            myConnection = conn;
         }
 
         public class FolderTreeRow

@@ -53,6 +53,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="SQLData\FilesTests.cs" />
     <Compile Include="SQLData\FolderTreeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLiteGeneral.cs" />

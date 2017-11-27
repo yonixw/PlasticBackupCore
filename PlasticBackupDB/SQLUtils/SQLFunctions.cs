@@ -10,6 +10,12 @@ namespace PlasticBackupDB.SQLUtils
 {
     public class SQLFunctions 
     {
+        private SQLFunctions() { }
+        public SQLFunctions(SQLConnection conn)
+        {
+            myConnection = conn;
+        }
+
         public SQLConnection myConnection { get; set; }
     }
 }

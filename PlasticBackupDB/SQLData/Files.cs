@@ -5,8 +5,13 @@ using System.Text;
 
 namespace PlasticBackupDB.SQLData
 {
-    public class Files
+    public class Files: SQLUtils.SQLFunctions
     {
+        public Files(SQLUtils.SQLConnection conn) : base(conn)
+        {
+
+        }
+
         public class FileRow
         {
             public long id = -1;
