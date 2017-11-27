@@ -29,8 +29,6 @@ namespace PlasticBackupDB.SQLData
 
         public FolderTreeRow createOrFindFolder(List<string> pathList)
         {
-            return null;
-
             // For each part, find o.w. insert and continue.
             FolderTreeRow lastFolder = new FolderTreeRow();
 
