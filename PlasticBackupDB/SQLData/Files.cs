@@ -37,5 +37,23 @@ namespace PlasticBackupDB.SQLData
         public void deleteFile(FileRow file) {  }
 
         public List<FileRow> getFolderFiles(FolderTree.FolderTreeRow folder) { return null; }
+
+        public SQLUtils.SQLCommand SQL_FILES_lastSequence =
+           new SQLUtils.SQLCommand(
+               @"SELECT seq FROM sqlite_sequence WHERE name = 'Files'",
+               null);
+
+        public long getLastSequence()
+        {
+            List<long> seq =
+                SQL_FILES_lastSequence.ExecuteReadAll(
+                    null,
+                    (reader) => { return Convert.ToInt64(reader["seq"]); },
+                    myConnection
+                    );
+
+            if (seq.Count != 1) throw new Exception("Can't read sequence counter. try after insert/delete");
+            return seq[0];
+        }
     }
 }
