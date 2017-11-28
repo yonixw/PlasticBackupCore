@@ -18,13 +18,11 @@ namespace PlasticBackupSQLiteDB.Test
         [TestMethod]
         public void TestConnectionListTables()
         {
-            conn.Open();
-
             List<string> tables = conn.GetAllTables();
             Trace.WriteLine("Has " + tables.Count + " Tables.");
             Assert.IsTrue(tables.Count > 0);
-
-            conn.Close();
         }
+
+
     }
 }

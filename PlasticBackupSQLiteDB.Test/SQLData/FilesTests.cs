@@ -28,6 +28,15 @@ namespace PlasticBackupSQLiteDB.Test
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exception), "sequence already exists?")]
+        public void checkFilesSeqThrowErrIfNull()
+        {
+            // Only should exist after insert\delete
+            _Filesfunc.myConnection.ClearSQLSequences();
+            _Filesfunc.getLastSequence();
+        }
+
+        [TestMethod]
         public void TestCreatingAndFindingFile()
         {
             FolderTree.FolderTreeRow folder = getTestFolder("_CreateFile");

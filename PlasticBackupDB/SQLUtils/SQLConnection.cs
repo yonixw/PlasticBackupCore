@@ -35,14 +35,24 @@ namespace PlasticBackupDB.SQLUtils
 
             List<string> result = new List<string>();
 
+            myConnection.Open();
             SQLiteCommand com = new SQLiteCommand(SQLData.SQLQueriesRaw.GET_ALL_TABLES_RAW , myConnection);
             SQLiteDataReader reader = com.ExecuteReader();
             while(reader.Read())
             {
                 result.Add(reader["name"] as string);
             }
+            myConnection.Close();
 
             return result;
+        }
+
+        public void ClearSQLSequences()
+        {
+            myConnection.Open();
+            SQLiteCommand com = new SQLiteCommand(SQLData.SQLQueriesRaw.CLEAR_SEQUENCES, myConnection);
+            com.ExecuteNonQuery();
+            myConnection.Close();
         }
     }
 }

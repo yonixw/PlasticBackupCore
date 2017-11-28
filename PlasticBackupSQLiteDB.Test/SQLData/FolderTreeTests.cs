@@ -25,9 +25,10 @@ namespace PlasticBackupSQLiteDB.Test
 
         [TestMethod]
         [ExpectedException(typeof(Exception),"sequence already exists?")] 
-        public void checkSequenceDoesntExist()
+        public void checkFolderTreeSeqThrowErrIfNull()
         {
             // Only should exist after insert\delete
+            FolderTreefunc.myConnection.ClearSQLSequences();
             FolderTreefunc.getLastSequence();
         }
 
