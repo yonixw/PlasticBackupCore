@@ -39,7 +39,7 @@ namespace PlasticBackupDB.SQLUtils
         System.Data.DbType getDBType(SQLParam.sqliteType type)
         {
             if (type.Equals(SQLParam.sqliteType.BLOB)) return System.Data.DbType.Binary;
-            if (type.Equals(SQLParam.sqliteType.INTEGER)) return System.Data.DbType.Int32;
+            if (type.Equals(SQLParam.sqliteType.INTEGER)) return System.Data.DbType.Int64;
             if (type.Equals(SQLParam.sqliteType.REAL)) return System.Data.DbType.Double;
             if (type.Equals(SQLParam.sqliteType.TEXT)) return System.Data.DbType.String;
 
@@ -66,6 +66,12 @@ namespace PlasticBackupDB.SQLUtils
                     param.ParameterName = sqlParams[i].name;
                     param.DbType = getDBType(sqlParams[i].paramType);
                     param.Value = paramValues[i];
+
+                    if (SQLUtils.SQLTypes.Instance.typeMap[paramValues[i].GetType()] != param.DbType)
+                    {
+                        throw new Exception("Wrong param type, param:" + param.ParameterName);
+                    }
+
                     command.Parameters.Add(param);
                 } 
             }
