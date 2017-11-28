@@ -104,13 +104,63 @@ namespace PlasticBackupSQLiteDB.Test
         [TestMethod]
         public void TestIDIncrementInsertOrDelete()
         {
-            // Create 2, delete last, add new and check middle id dont ger reused
+            // Create 2, delete first, add new and check id dont ger reused
+
+            FolderTree.FolderTreeRow folder = getTestFolder("_IncrementIDFile");
+
+            Files.FileRow file = _Filesfunc.createOrFindFile(folder, "1");
+            Files.FileRow file2 = _Filesfunc.createOrFindFile(folder, "2");
+
+            _Filesfunc.deleteFile(file);
+
+            Files.FileRow file3 = _Filesfunc.createOrFindFile(folder, "1");
+
+            // Bigger and different:
+
+            Assert.IsTrue(file3.id != file.id);
+
+            Assert.IsTrue(file3.id > file.id);
+
+            Assert.IsTrue(file3.id > file2.id);
         }
 
         [TestMethod]
-        public void TestGetFolderFiles()
+        public void TestGetFolderFilesNotEmpty()
         {
             // Create files and try to get them, maybe implement fast list compare?
+
+            FolderTree.FolderTreeRow folder = getTestFolder("_ListFolderFiles");
+
+            Files.FileRow file = _Filesfunc.createOrFindFile(folder, "1a");
+            Files.FileRow file2 = _Filesfunc.createOrFindFile(folder, "2b");
+
+            List<Files.FileRow> files = _Filesfunc.getFolderFiles(folder);
+
+            Assert.IsNotNull(files);
+
+            Assert.IsTrue(files.Count == 2);
+
+            bool sameList = (files[0].id == file.id && files[1].id == file2.id)
+                ||
+                (files[1].id == file.id && files[0].id == file2.id);
+
+            Assert.IsTrue(sameList);
+        }
+
+        [TestMethod]
+        public void TestGetFolderFilesWhenEmpty()
+        {
+            // Create files and try to get them, maybe implement fast list compare?
+
+            FolderTree.FolderTreeRow folder = getTestFolder("_ListFolderFiles2");
+
+          
+            List<Files.FileRow> files = _Filesfunc.getFolderFiles(folder);
+
+            Assert.IsNotNull(files);
+
+            Assert.IsTrue(files.Count == 0);
+
         }
     }
 }
