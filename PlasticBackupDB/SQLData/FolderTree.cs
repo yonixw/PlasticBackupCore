@@ -70,8 +70,6 @@ namespace PlasticBackupDB.SQLData
 
         FolderTreeRow newFolder(long parentid, string partname)
         {
-            FolderTreeRow result = new FolderTreeRow();
-
             // Insert new:
             int rowsAdded = SQL_FOLDERTREE_insert.ExecuteNonScalar(
                     new List<object>() { parentid, partname } , myConnection
@@ -81,7 +79,7 @@ namespace PlasticBackupDB.SQLData
             long folderId = getLastSequence();
 
             // Return folder:
-            result = findFolderByID(folderId);
+            FolderTreeRow result = findFolderByID(folderId);
 
             return result;
         }

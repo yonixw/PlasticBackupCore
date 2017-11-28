@@ -20,23 +20,139 @@ namespace PlasticBackupDB.SQLData
             public bool error = true; // This class has invalid information.
         }
 
+        public SQLUtils.SQLCommand SQL_FILES_insert =
+          new SQLUtils.SQLCommand(
+              @"INSERT INTO Files (folderid, name) VALUES (@folderid, @name)",
+              new List<SQLUtils.SQLCommand.SQLParam>()
+              {
+                    new SQLUtils.SQLCommand.SQLParam("@folderid", SQLUtils.SQLCommand.SQLParam.sqliteType.INTEGER),
+                    new SQLUtils.SQLCommand.SQLParam("@name", SQLUtils.SQLCommand.SQLParam.sqliteType.TEXT)
+              });
 
-        public SQLUtils.SQLCommand SQL_FILES_selectByParentID =
+        private FileRow newFile(long folderid, string filename) { 
+            // Insert new:
+            int rowsAdded = SQL_FILES_insert.ExecuteNonScalar(
+                    new List<object>() { folderid, filename }, myConnection
+                );
+
+            // Get last index:
+            long fileId = getLastSequence();
+
+            // Return folder:
+            FileRow result = findFileById(fileId);
+
+            return result;
+        }
+
+        public SQLUtils.SQLCommand SQL_FILES_selectByParentAndName =
+           new SQLUtils.SQLCommand(
+               @"SELECT * FROM Files WHERE folderid=@folderid AND name=@name",
+               new List<SQLUtils.SQLCommand.SQLParam>()
+               {
+                    new SQLUtils.SQLCommand.SQLParam("@folderid", SQLUtils.SQLCommand.SQLParam.sqliteType.INTEGER),
+                    new SQLUtils.SQLCommand.SQLParam("@name", SQLUtils.SQLCommand.SQLParam.sqliteType.TEXT)
+               });
+
+        public FileRow createOrFindFile(FolderTree.FolderTreeRow folder, string filename) {
+            List<FileRow> result =
+                SQL_FILES_selectByParentAndName.ExecuteReadAll<FileRow>(
+                    new List<object>() { folder.id, filename },
+                    (reader) =>
+                    {
+                        return new FileRow()
+                        {
+                            id = Convert.ToInt64(reader["id"]),
+                            fileName = reader["name"] as string,
+                            myFolderId = Convert.ToInt64(reader["folderid"]),
+                            error = false
+                        };
+                    }, myConnection
+                );
+
+            if (result.Count == 0)
+                return newFile(folder.id, filename);
+            else
+                return result[0];
+        }
+
+
+        public SQLUtils.SQLCommand SQL_FILES_selectByID =
             new SQLUtils.SQLCommand(
-                @"INSERT INTO FolderTree (parentid, name) VALUES (@parentid, @name)",
+                @"SELECT * FROM Files WHERE id=@id",
                 new List<SQLUtils.SQLCommand.SQLParam>()
                 {
-                    new SQLUtils.SQLCommand.SQLParam("@parentid", SQLUtils.SQLCommand.SQLParam.sqliteType.INTEGER),
-                    new SQLUtils.SQLCommand.SQLParam("@name", SQLUtils.SQLCommand.SQLParam.sqliteType.TEXT)
+                    new SQLUtils.SQLCommand.SQLParam("@id", SQLUtils.SQLCommand.SQLParam.sqliteType.INTEGER)
                 });
 
-        public FileRow createOrFindFile(FolderTree.FolderTreeRow folder, string filename) { return null; }
+        public FileRow findFileById(long rowid) {
+            FileRow result = new FileRow();
 
-        public FileRow findFileById(long id) { return null; }
+            List<FileRow> rows = new List<FileRow>();
+            rows = SQL_FILES_selectByID.ExecuteReadAll<FileRow>(
+                    new List<object>() { rowid },
+                    (reader) =>
+                    {
+                        return new FileRow()
+                        {
+                            id = Convert.ToInt64(reader["id"]),
+                            fileName = reader["name"] as string,
+                            myFolderId = Convert.ToInt64(reader["folderid"]),
+                            error = false
+                        };
+                    }, myConnection
+                );
 
-        public void deleteFile(FileRow file) {  }
+            // One id is one folder!!
+            if (rows.Count == 1)
+                result = rows[0];
+            // Else no id found.
 
-        public List<FileRow> getFolderFiles(FolderTree.FolderTreeRow folder) { return null; }
+            return result;
+        }
+
+        public SQLUtils.SQLCommand SQL_FILES_deleteById =
+          new SQLUtils.SQLCommand(
+              @"DELETE FROM Files WHERE id = @id",
+              new List<SQLUtils.SQLCommand.SQLParam>()
+              {
+                    new SQLUtils.SQLCommand.SQLParam("@id", SQLUtils.SQLCommand.SQLParam.sqliteType.INTEGER)
+              });
+
+        public void deleteFile(FileRow file) {
+            int deletedRowsCount = (int) // https://stackoverflow.com/a/24235553/1997873
+                SQL_FILES_deleteById.ExecuteNonScalar(new List<object>() { file.id }, myConnection);
+
+            //if (deletedRowsCount != 1) Folder already deleted.
+
+            // Invalidate Object.
+            file.error = true;
+        }
+
+        public SQLUtils.SQLCommand SQL_FILES_selectByFolder =
+           new SQLUtils.SQLCommand(
+               @"SELECT * FROM Files WHERE folderid=@folderid",
+               new List<SQLUtils.SQLCommand.SQLParam>()
+               {
+                    new SQLUtils.SQLCommand.SQLParam("@folderid", SQLUtils.SQLCommand.SQLParam.sqliteType.INTEGER)
+               });
+
+        public List<FileRow> getFolderFiles(FolderTree.FolderTreeRow folder) {
+            List<FileRow> result =
+                SQL_FILES_selectByFolder.ExecuteReadAll<FileRow>(
+                    new List<object>() { folder.id },
+                    (reader) =>
+                    {
+                        return new FileRow()
+                        {
+                            id = Convert.ToInt64(reader["id"]),
+                            fileName = reader["name"] as string,
+                            myFolderId = Convert.ToInt64(reader["folderid"]),
+                            error = false
+                        };
+                    }, myConnection
+                );
+            return result;
+        }
 
         public SQLUtils.SQLCommand SQL_FILES_lastSequence =
            new SQLUtils.SQLCommand(
