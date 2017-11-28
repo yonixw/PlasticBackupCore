@@ -57,6 +57,7 @@
     <Compile Include="SQLUtils\SQLConnection.cs" />
     <Compile Include="SQLUtils\SQLFunctions.cs" />
     <Compile Include="SQLData\SQLQueries.cs" />
+    <Compile Include="SQLUtils\SQLTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -92,4 +93,37 @@ xcopy "$(TargetDir)*.*" "$(SolutionDir)PlasticBackupSQLiteDB.Test\bin\Debug\" /Y
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Choose>
+    <When Condition=" $(TargetFrameworkVersion) == 'v2.0' ">
+      <PropertyGroup>
+        <CustomConstants>$(CustomConstants);NETFX_20</CustomConstants>
+      </PropertyGroup>
+    </When>
+    <When Condition=" $(TargetFrameworkVersion) == 'v3.0' ">
+      <PropertyGroup>
+        <CustomConstants>$(CustomConstants);NETFX_30</CustomConstants>
+        <CustomConstants>$(CustomConstants);NETFX_20</CustomConstants>
+      </PropertyGroup>
+    </When>
+    <When Condition=" $(TargetFrameworkVersion) == 'v3.5' ">
+      <PropertyGroup>
+        <CustomConstants>$(CustomConstants);NETFX_35</CustomConstants>
+        <CustomConstants>$(CustomConstants);NETFX_30</CustomConstants>
+        <CustomConstants>$(CustomConstants);NETFX_20</CustomConstants>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <CustomConstants Condition="$([System.Version]::Parse('$(TargetFrameworkVersion.Substring(1))').CompareTo($([System.Version]::Parse('4.5.1')))) &gt;= 0">$(CustomConstants);NETFX_451</CustomConstants>
+        <CustomConstants Condition="$([System.Version]::Parse('$(TargetFrameworkVersion.Substring(1))').CompareTo($([System.Version]::Parse('4.5')))) &gt;= 0">$(CustomConstants);NETFX_45</CustomConstants>
+        <CustomConstants Condition="$([System.Version]::Parse('$(TargetFrameworkVersion.Substring(1))').CompareTo($([System.Version]::Parse('4.0')))) &gt;= 0">$(CustomConstants);NETFX_40</CustomConstants>
+        <CustomConstants Condition="$([System.Version]::Parse('$(TargetFrameworkVersion.Substring(1))').CompareTo($([System.Version]::Parse('3.5')))) &gt;= 0">$(CustomConstants);NETFX_35</CustomConstants>
+        <CustomConstants Condition="$([System.Version]::Parse('$(TargetFrameworkVersion.Substring(1))').CompareTo($([System.Version]::Parse('3.0')))) &gt;= 0">$(CustomConstants);NETFX_30</CustomConstants>
+        <CustomConstants Condition="$([System.Version]::Parse('$(TargetFrameworkVersion.Substring(1))').CompareTo($([System.Version]::Parse('2.0')))) &gt;= 0">$(CustomConstants);NETFX_20</CustomConstants>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);$(CustomConstants)</DefineConstants>
+  </PropertyGroup>
 </Project>
